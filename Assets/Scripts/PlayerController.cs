@@ -18,12 +18,8 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform raycastCenter;
-    [SerializeField] private LayerMask groundLayer;
-    [SerializeField] private LayerMask slopeLayer;
     [SerializeField] private Animator animator;
     private BoxCollider2D cl;
-    private HingeJoint2D hj;
-    public GameObject checkPoint;
     [SerializeField] private ParticleSystem dust;
     [SerializeField] private PhysicsMaterial2D fullFriction;
     [SerializeField] private PhysicsMaterial2D frictionLess;
@@ -34,14 +30,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float movementAcceleration;
     [SerializeField] private float maxMoveSpeed;
     [SerializeField] private float groundLinearDrag;
-    [SerializeField] private float horizontalDirection;
-    private float verticalDirection;
+    [SerializeField] private Vector2 movementDirection;
     private float horizontalPrev;
     private float verticalPrev;
-    private bool flipCharacter => (rb.velocity.x > 0f && horizontalDirection < 0f) ||
-                                  (rb.velocity.x < 0f && horizontalDirection > 0f);
-
-
+    private bool flipCharacter => (rb.velocity.x > 0f && movementDirection.x < 0f) ||
+                                  (rb.velocity.x < 0f && movementDirection.x > 0f);
 
 
     [Header("Collision")]
@@ -56,16 +49,15 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         cl = GetComponent<BoxCollider2D>();
-        hj = gameObject.GetComponent<HingeJoint2D>();
     }
     // Update is called once per frame
     private void Update()
     {
-        animator.SetBool("Crouching", crouch);
-        animator.SetBool("Jumping", jump);
-        animator.SetBool("Attaching", attached);
-        animator.SetBool("OnGround", onGround);
-        animator.SetBool("Walking", MathF.Abs(horizontalDirection) >= 0.7f);
+        //animator.SetBool("Crouching", crouch);
+        //animator.SetBool("Jumping", jump);
+        //animator.SetBool("Attaching", attached);
+        //animator.SetBool("OnGround", onGround);
+        //animator.SetBool("Walking", MathF.Abs(horizontalDirection) >= 0.7f);
     }
     private void FixedUpdate()
     {
@@ -75,11 +67,11 @@ public class PlayerController : MonoBehaviour
         MoveCharacter();
        
 
-        if (isFacingRight && horizontalDirection < 0f)
+        if (isFacingRight && movementDirection.x < 0f)
         {
             Flip();
         }
-        else if (!isFacingRight && horizontalDirection > 0f)
+        else if (!isFacingRight && movementDirection.x > 0f)
         {
             Flip();
         }
@@ -91,23 +83,8 @@ public class PlayerController : MonoBehaviour
     public void GetHorizontalInput(InputAction.CallbackContext context)
     {
 
-
-        horizontalDirection = context.ReadValue<Vector2>().x;
-
-        verticalDirection = context.ReadValue<Vector2>().y;
-
-
-
-
-        // if (context.performed)
-        // {
-        //     StopCoroutine(airDragEnumerator());
-        // }
-        // if (context.canceled)
-        // {
-        //     StartCoroutine(airDragEnumerator());
-        //
-        // }
+        Debug.Log("Movimiento");
+        movementDirection =new Vector2(context.ReadValue<Vector2>().x, context.ReadValue<Vector2>().y);
 
 
 
@@ -127,7 +104,7 @@ public class PlayerController : MonoBehaviour
     #region AESTHETIC
     void CreateDust()
     {
-        dust.Play();
+       // dust.Play();
     }
     private void Flip()
     {
@@ -146,54 +123,12 @@ public class PlayerController : MonoBehaviour
 
     private void MoveCharacter()
     {
-        if (!crouch && !attached && !onSlopes)
-        {
 
-            rb.AddForce(new Vector2(horizontalDirection, 0) * movementAcceleration);
-
+        rb.MovePosition(rb.position + (movementDirection*movementAcceleration*Time.fixedDeltaTime));
+        Debug.Log("moverse");
             if (MathF.Abs(rb.velocity.x) > maxMoveSpeed)
-                rb.velocity = new Vector2(MathF.Sign(rb.velocity.x) * maxMoveSpeed, rb.velocity.y);
+                rb.velocity = new Vector2(MathF.Sign(rb.velocity.x) * maxMoveSpeed, MathF.Sign(rb.velocity.y) * maxMoveSpeed);
 
-
-            rb.drag = 20.0f;
-        }
-        else if (onSlopes)
-        {
-            Debug.Log("llegue");
-            rb.AddForce(new Vector2(-horizontalDirection * slopeNormal.x * movementAcceleration, slopeNormal.y * -horizontalDirection * movementAcceleration) * 2);
-
-            if (MathF.Abs(rb.velocity.x) > maxMoveSpeed)
-                rb.velocity = new Vector2(MathF.Sign(rb.velocity.x) * maxMoveSpeed, rb.velocity.y);
-            rb.drag = 20.0f;
-        }
-        else if (crouch)
-        {
-            rb.AddForce(new Vector2(horizontalDirection, 0) * movementAcceleration / 2);
-            if (MathF.Abs(rb.velocity.x) > maxMoveSpeed / 2)
-                rb.velocity = new Vector2(MathF.Sign(rb.velocity.x) * (maxMoveSpeed / 2), rb.velocity.y);
-        }
-        else if (attached)
-        {
-
-            if (horizontalDirection > 0)
-            {
-                VineSwing(true);
-            }
-            else if (horizontalDirection < 0)
-            {
-                VineSwing(false);
-            }
-            if (verticalDirection > 0)
-            {
-                Debug.Log("Agarrado");
-                VineSlide(true);
-            }
-            else if (verticalDirection < 0)
-            {
-
-                VineSlide(false);
-            }
-        }
     }
 
     #endregion
@@ -203,49 +138,8 @@ public class PlayerController : MonoBehaviour
 
     public void CheckCollision()
     {
-        onGround = Physics2D.Raycast(raycastCenter.transform.position * groundRaycastLength, Vector2.down, groundRaycastLength, groundLayer) ||
-                   Physics2D.Raycast(raycastCenter.transform.position - groundRaycastOffset, Vector2.down, groundRaycastLength, groundLayer);
-        onSlopes = Physics2D.Raycast(raycastCenter.transform.position * groundRaycastLength, Vector2.down, groundRaycastLength, slopeLayer) ||
-                     Physics2D.Raycast(raycastCenter.transform.position - groundRaycastOffset, Vector2.down, groundRaycastLength, slopeLayer);
-
-        RaycastHit2D hit = Physics2D.Raycast(raycastCenter.transform.position * groundRaycastLength, Vector2.down,
-            groundRaycastLength, slopeLayer);
-        if (hit)
-        {
-            slopeNormal = Vector2.Perpendicular(hit.normal).normalized;
-            slopeAngle = Vector2.Angle(hit.normal, Vector2.up);
-        }
-
-        if (onGround && onSlopes)
-        {
-            coyoteCounter = coyoteTime;
-            disregard = null;
-            rb.sharedMaterial = fullFriction;
-
-        }
-        else if (!onGround && onSlopes)
-        {
-            coyoteCounter = coyoteTime;
-            disregard = null;
-            rb.sharedMaterial = fullFriction;
-
-        }
-        else if (onGround && !onSlopes)
-        {
-            coyoteCounter = coyoteTime;
-            disregard = null;
-            rb.sharedMaterial = frictionLess;
-
-        }
-        else
-            coyoteCounter -= Time.deltaTime;
-
-        if (onSlopes && horizontalDirection != 0)
-        {
-            rb.sharedMaterial = frictionLess;
-        }
-
-
+        
+        
     }
 
     private void OnDrawGizmos()
