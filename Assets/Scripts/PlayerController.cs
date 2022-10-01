@@ -17,9 +17,9 @@ public class PlayerController : MonoBehaviour
     [Header("Components")]
 
     [SerializeField] private Rigidbody2D rb;
+    [SerializeField] private BoxCollider2D cl;
     [SerializeField] private Transform raycastCenter;
     [SerializeField] private Animator animator;
-    private BoxCollider2D cl;
     [SerializeField] private ParticleSystem dust;
     [SerializeField] private PhysicsMaterial2D fullFriction;
     [SerializeField] private PhysicsMaterial2D frictionLess;
@@ -142,8 +142,8 @@ public class PlayerController : MonoBehaviour
 
     public void CheckCollision()
     {
-       
 
+        
 
     }
 
