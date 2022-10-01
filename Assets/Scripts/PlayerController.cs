@@ -40,14 +40,18 @@ public class PlayerController : MonoBehaviour
     [Header("Collision")]
 
     [SerializeField] private float groundRaycastLength = 0.3f;
-    [SerializeField] private Vector3 groundRaycastOffset;
+    [SerializeField] private bool leftCol   ;
+    [SerializeField] private bool rightCol  ;
+    [SerializeField] private bool downCol   ;
+    [SerializeField] private bool UpCol;
     [SerializeField] private bool isFacingRight = true;
 
-
+    
     // Start is called before the first frame update
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        
         cl = GetComponent<BoxCollider2D>();
     }
     // Update is called once per frame
@@ -138,16 +142,22 @@ public class PlayerController : MonoBehaviour
 
     public void CheckCollision()
     {
-        
-        
+       
+
+
     }
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.blue;
+  
+        Gizmos.color = Color.black;
         Gizmos.DrawLine(raycastCenter.transform.position, raycastCenter.transform.position + Vector3.down * groundRaycastLength);
-        Gizmos.color = Color.red;
-        Gizmos.DrawLine(raycastCenter.transform.position - groundRaycastOffset, raycastCenter.transform.position - groundRaycastOffset + Vector3.down * groundRaycastLength);
+ 
+        Gizmos.DrawLine(raycastCenter.transform.position, raycastCenter.transform.position + Vector3.left * groundRaycastLength); Gizmos.color = Color.blue;
+        Gizmos.DrawLine(raycastCenter.transform.position, raycastCenter.transform.position + Vector3.right * groundRaycastLength);
+  
+        Gizmos.DrawLine(raycastCenter.transform.position, raycastCenter.transform.position + Vector3.up * groundRaycastLength);
+
     }
 
     #endregion
