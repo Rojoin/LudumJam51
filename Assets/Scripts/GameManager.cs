@@ -5,11 +5,24 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    static GameManager instance;
+    public static GameManager instance;
 
     [SerializeField] float masterVolume;
+    public float MasterVolume()
+    {
+        return masterVolume;
+    }
+
     [SerializeField] float musicVolume;
+    public float MusicVolume()
+    {
+        return musicVolume;
+    } 
     [SerializeField] float sfxVolume;
+    public float SfxVolume()
+    {
+        return sfxVolume;
+    }
     private void Awake()
     {
         if(instance != null && instance != this)
@@ -29,5 +42,23 @@ public class GameManager : MonoBehaviour
     }
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+            FindObjectOfType<HudController>().Options();
+    }
+
+    public void SetVolume(float volume, string volumeType)
+    {
+        switch (volumeType)
+        {
+            case "Master":
+                masterVolume = volume;
+                break;
+            case "Music":
+                musicVolume = volume;
+                break;
+            case "Sfx":
+                sfxVolume = volume;
+                break;
+        }
     }
 }
