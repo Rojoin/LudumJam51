@@ -61,4 +61,13 @@ public class GameManager : MonoBehaviour
                 break;
         }
     }
+    public void newScene(string newSceneName)
+    {
+        SceneManager.LoadScene(newSceneName);
+    }
+    public void QuitGame()
+    {
+        Debug.Log("Exiting Game");
+        Application.Quit();
+    }
 }
