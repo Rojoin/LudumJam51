@@ -40,22 +40,18 @@ public class HudController : MonoBehaviour
     public void Options()
     {
         OptionsPanel.SetActive(true);
-        MainMenuPanel.SetActive(false);
     }
 
     public void CloseOptions()
     {
-        MainMenuPanel.SetActive(true);
         OptionsPanel.SetActive(false);
     }
     public void credits()
     {
         CreditsPanel.SetActive(true);
-        MainMenuPanel.SetActive(false);
     }
     public void CloseCredits()
     {
-        MainMenuPanel.SetActive(true);
         CreditsPanel.SetActive(false);
     }
 }
