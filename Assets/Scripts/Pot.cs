@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,15 +25,28 @@ public class Pot : MonoBehaviour
     void Update()
     {
        spriteRenderer.material.color = Color.LerpUnclamped(spriteRenderer.material.color, color,lerpTime*Time.deltaTime);
-        if (spriteRenderer.material.color == Color.LerpUnclamped(spriteRenderer.material.color, color, lerpTime * Time.deltaTime))
-        {
-            Debug.Log("Termino");
-        }
-        else if (spriteRenderer.material.color != Color.LerpUnclamped(spriteRenderer.material.color, color, lerpTime * Time.deltaTime))
-        {
-            Debug.Log("En Proceso");
-            
-        }
+
+       if (MathF.Abs(spriteRenderer.material.color.r - color.r)<.1f)
+       {
+           Debug.Log("Rojo");
+           if (MathF.Abs(spriteRenderer.material.color.b - color.b) < .1f)
+           {
+           Debug.Log("Azul");
+               if (MathF.Abs(spriteRenderer.material.color.g - color.g) < .1f)
+               {
+                   Debug.Log("Colores Parecidos");
+               }
+           }
+       }
+        //if (spriteRenderer.material.color == Color.LerpUnclamped(spriteRenderer.material.color, color, lerpTime * Time.deltaTime))
+        //{
+        //    Debug.Log("Termino");
+        //}
+        //else if (spriteRenderer.material.color != Color.LerpUnclamped(spriteRenderer.material.color, color, lerpTime * Time.deltaTime))
+        //{
+        //    Debug.Log("En Proceso");
+        //    
+        //}
        
     }
 }
