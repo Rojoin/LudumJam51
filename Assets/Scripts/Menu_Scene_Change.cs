@@ -12,6 +12,7 @@ public class Menu_Scene_Change : MonoBehaviour
     }
     public void QuitGame() 
     {
+        Debug.Log("Exiting Game");
         Application.Quit();
     }
 }

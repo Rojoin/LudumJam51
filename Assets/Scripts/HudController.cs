@@ -4,7 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 public class HudController : MonoBehaviour
 {
+    [SerializeField] GameObject MainMenuPanel;
     [SerializeField] GameObject OptionsPanel;
+    [SerializeField] GameObject CreditsPanel;
+
     Slider masterVolumeSlider;
     Slider musicVolumeSlider;
     Slider sfxVolumeSlider;
@@ -14,7 +17,9 @@ public class HudController : MonoBehaviour
         masterVolumeSlider = OptionsPanel.transform.GetChild(0).GetComponent<Slider>();
         musicVolumeSlider = OptionsPanel.transform.GetChild(1).GetComponent<Slider>();
         sfxVolumeSlider = OptionsPanel.transform.GetChild(2).GetComponent<Slider>();
+        MainMenuPanel.SetActive(true);
         OptionsPanel.SetActive(false);
+        CreditsPanel.SetActive(false);
     }
     private void Start()
     {
@@ -35,14 +40,22 @@ public class HudController : MonoBehaviour
     public void Options()
     {
         OptionsPanel.SetActive(true);
+        MainMenuPanel.SetActive(false);
     }
 
     public void CloseOptions()
     {
+        MainMenuPanel.SetActive(true);
         OptionsPanel.SetActive(false);
     }
     public void credits()
     {
-
+        CreditsPanel.SetActive(true);
+        MainMenuPanel.SetActive(false);
+    }
+    public void CloseCredits()
+    {
+        MainMenuPanel.SetActive(true);
+        CreditsPanel.SetActive(false);
     }
 }
