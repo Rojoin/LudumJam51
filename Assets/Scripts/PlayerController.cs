@@ -17,9 +17,9 @@ public class PlayerController : MonoBehaviour
     [Header("Components")]
 
     [SerializeField] private Rigidbody2D rb;
+    [SerializeField] private BoxCollider2D cl;
     [SerializeField] private Transform raycastCenter;
     [SerializeField] private Animator animator;
-    private BoxCollider2D cl;
     [SerializeField] private ParticleSystem dust;
     [SerializeField] private PhysicsMaterial2D fullFriction;
     [SerializeField] private PhysicsMaterial2D frictionLess;
@@ -40,7 +40,10 @@ public class PlayerController : MonoBehaviour
     [Header("Collision")]
 
     [SerializeField] private float groundRaycastLength = 0.3f;
-    [SerializeField] private Vector3 groundRaycastOffset;
+    [SerializeField] private bool leftCol   ;
+    [SerializeField] private bool rightCol  ;
+    [SerializeField] private bool downCol   ;
+    [SerializeField] private bool UpCol;
     [SerializeField] private bool isFacingRight = true;
 
     
@@ -139,8 +142,8 @@ public class PlayerController : MonoBehaviour
 
     public void CheckCollision()
     {
-       
 
+        
 
     }
 
