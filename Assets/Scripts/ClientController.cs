@@ -16,6 +16,7 @@ public class ClientController : MonoBehaviour
     [SerializeField] int rayDistance;
     [SerializeField] LayerMask clients;
     [SerializeField] LayerMask Lane;
+    [SerializeField] Color wantedGuiso;
 
     [SerializeField] bool hasReceivedGuiso = false;
     [SerializeField] int SecondsToWait;
@@ -37,9 +38,15 @@ public class ClientController : MonoBehaviour
         if (!Physics2D.Raycast(rayCastCenter.position, direction, rayDistance, clients))
         {
             if (transform.position.x >= servingPoint.transform.position.x || hasReceivedGuiso || hasWaited)
+            {
                 transform.Translate(direction * speed * Time.deltaTime);
+
+            }
             else if (!isWaiting && !hasWaited)
+            {
                 StartCoroutine(Wait());
+
+            }
             if (!Physics2D.Raycast(backRayCastCenter.position, Vector2.right, rayDistance, Lane))
             {
                 direction = Vector2.down;
@@ -66,5 +73,14 @@ public class ClientController : MonoBehaviour
         yield return new WaitForSeconds(SecondsToWait);
         hasWaited = true;
         isWaiting = false;
+    }
+
+    bool isGuisoCorrect()
+    {
+
+
+
+        return false;
+
     }
 }

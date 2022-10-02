@@ -49,7 +49,8 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        itemGameObject = gameObject.transform.Find("Square").gameObject;
+        itemGameObject = gameObject.transform.Find("actualItem").gameObject;
+        itemGameObject.tag = "Null";
         cl = GetComponent<BoxCollider2D>();
     }
 
@@ -149,30 +150,32 @@ public class PlayerController : MonoBehaviour
         if (hit.collider != null)
         {
 
-            if (hit.collider.gameObject.CompareTag("Collision"))
+            if (hit.collider.gameObject.CompareTag("Ingredient") && !itemGameObject.CompareTag("Dish"))
             {
-
-                item = hit.collider.GetComponent<ItemObject>();
+                itemGameObject.tag = hit.collider.gameObject.tag;
+                itemGameObject.GetComponent<ItemObject>().color = hit.collider.GetComponent<SpriteRenderer>().color;
                 itemGameObject.GetComponent<SpriteRenderer>().sprite = hit.collider.GetComponent<SpriteRenderer>().sprite;
                 itemGameObject.GetComponent<SpriteRenderer>().color = hit.collider.GetComponent<SpriteRenderer>().color;
 
             }
             else if (hit.collider.gameObject.CompareTag("Pot"))
             {
-                if (item != null)
+                if (itemGameObject.CompareTag("Ingredient"))
                 {
+                    hit.collider.gameObject.GetComponent<Pot>().color = itemGameObject.GetComponent<ItemObject>().color;
 
-                    if (hit.collider.gameObject.GetComponent<Pot>().color != Color.black)
-                    {
-                        hit.collider.gameObject.GetComponent<Pot>().color = item.getColor;
-                    }
-                    else if (hit.collider.gameObject.GetComponent<Pot>().color != Color.red)
-                    {
-                        hit.collider.gameObject.GetComponent<Pot>().color = Color.red;
-                    }
+                    hit.collider.gameObject.GetComponent<Pot>().isGuisoReady = false;
+                    itemGameObject.tag = "Null";
+                    itemGameObject.GetComponent<SpriteRenderer>().sprite = null;
+                    itemGameObject.GetComponent<SpriteRenderer>().color = new Color(1,1,1,0);
                 }
-
-
+                else if (hit.collider.gameObject.GetComponent<Pot>().getIsGuisoReady && itemGameObject.CompareTag("Null"))
+                {
+                    itemGameObject.tag = "Dish";
+                    itemGameObject.GetComponent<ItemObject>().color = hit.collider.gameObject.GetComponent<Pot>().color;
+                    itemGameObject.GetComponent<SpriteRenderer>().sprite = hit.collider.gameObject.GetComponent<SpriteRenderer>().sprite;
+               
+                }
             }
         }
 

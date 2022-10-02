@@ -12,7 +12,7 @@ public class Pot : MonoBehaviour
 
     public Color color;
 
-    private int colorIndex;
+    public bool isGuisoReady = false;
 
     private float time;
     // Start is called before the first frame update
@@ -26,27 +26,17 @@ public class Pot : MonoBehaviour
     {
        spriteRenderer.material.color = Color.LerpUnclamped(spriteRenderer.material.color, color,lerpTime*Time.deltaTime);
 
-       if (MathF.Abs(spriteRenderer.material.color.r - color.r)<.1f)
+       if (MathF.Abs(spriteRenderer.material.color.r - color.r)<.1f && (MathF.Abs(spriteRenderer.material.color.b - color.b) < .1f)&& (MathF.Abs(spriteRenderer.material.color.g - color.g) < .1f))
        {
-           Debug.Log("Rojo");
-           if (MathF.Abs(spriteRenderer.material.color.b - color.b) < .1f)
-           {
-           Debug.Log("Azul");
-               if (MathF.Abs(spriteRenderer.material.color.g - color.g) < .1f)
-               {
-                   Debug.Log("Colores Parecidos");
-               }
-           }
+           isGuisoReady = true;
+           Debug.Log("Ready");
        }
-        //if (spriteRenderer.material.color == Color.LerpUnclamped(spriteRenderer.material.color, color, lerpTime * Time.deltaTime))
-        //{
-        //    Debug.Log("Termino");
-        //}
-        //else if (spriteRenderer.material.color != Color.LerpUnclamped(spriteRenderer.material.color, color, lerpTime * Time.deltaTime))
-        //{
-        //    Debug.Log("En Proceso");
-        //    
-        //}
-       
+       else
+       {
+           isGuisoReady = false;
+       }
+
     }
+
+   public bool getIsGuisoReady=> isGuisoReady;
 }

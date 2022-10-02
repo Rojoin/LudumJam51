@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class ItemObject : MonoBehaviour
 {
-    [SerializeField] private Color color;
+    [SerializeField] public Color color;
     [SerializeField] private SpriteRenderer sprite;
 
 
@@ -15,5 +15,6 @@ public class ItemObject : MonoBehaviour
    }
 
     public Color getColor => color;
+ 
     public SpriteRenderer getSprite => sprite;
 }
