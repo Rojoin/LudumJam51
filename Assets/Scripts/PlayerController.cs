@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
+using TMPro.EditorUtilities;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -17,69 +18,63 @@ public class PlayerController : MonoBehaviour
     [Header("Components")]
 
     [SerializeField] private Rigidbody2D rb;
+    [SerializeField] private BoxCollider2D cl;
     [SerializeField] private Transform raycastCenter;
-    [SerializeField] private LayerMask groundLayer;
-    [SerializeField] private LayerMask slopeLayer;
-    [SerializeField] private Animator animator;
-    private BoxCollider2D cl;
-    private HingeJoint2D hj;
-    public GameObject checkPoint;
-    [SerializeField] private ParticleSystem dust;
-    [SerializeField] private PhysicsMaterial2D fullFriction;
-    [SerializeField] private PhysicsMaterial2D frictionLess;
+    [SerializeField] private ItemObject item;
+    [SerializeField] private GameObject itemGameObject;
+
 
 
     [Header("Movement")]
 
     [SerializeField] private float movementAcceleration;
     [SerializeField] private float maxMoveSpeed;
-    [SerializeField] private float groundLinearDrag;
-    [SerializeField] private float horizontalDirection;
-    private float verticalDirection;
+    [SerializeField] private Vector2 movementDirection;
+
     private float horizontalPrev;
     private float verticalPrev;
-    private bool flipCharacter => (rb.velocity.x > 0f && horizontalDirection < 0f) ||
-                                  (rb.velocity.x < 0f && horizontalDirection > 0f);
 
-
+    private bool flipCharacter => (rb.velocity.x > 0f && movementDirection.x < 0f) ||
+                                  (rb.velocity.x < 0f && movementDirection.x > 0f);
 
 
     [Header("Collision")]
 
-    [SerializeField] private float groundRaycastLength = 0.3f;
-    [SerializeField] private Vector3 groundRaycastOffset;
+    [SerializeField] private float raycastLength = 0.3f;
     [SerializeField] private bool isFacingRight = true;
+
 
 
     // Start is called before the first frame update
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        itemGameObject = gameObject.transform.Find("Square").gameObject;
         cl = GetComponent<BoxCollider2D>();
-        hj = gameObject.GetComponent<HingeJoint2D>();
     }
+
     // Update is called once per frame
     private void Update()
     {
-        animator.SetBool("Crouching", crouch);
-        animator.SetBool("Jumping", jump);
-        animator.SetBool("Attaching", attached);
-        animator.SetBool("OnGround", onGround);
-        animator.SetBool("Walking", MathF.Abs(horizontalDirection) >= 0.7f);
+
+        //animator.SetBool("Crouching", crouch);
+        //animator.SetBool("Jumping", jump);
+        //animator.SetBool("Attaching", attached);
+        //animator.SetBool("OnGround", onGround);
+        //animator.SetBool("Walking", MathF.Abs(horizontalDirection) >= 0.7f);
     }
+
     private void FixedUpdate()
     {
-       
-       
-        CheckCollision();
-        MoveCharacter();
-       
 
-        if (isFacingRight && horizontalDirection < 0f)
+        MoveCharacter();
+
+
+        if (isFacingRight && movementDirection.x < 0f)
         {
             Flip();
         }
-        else if (!isFacingRight && horizontalDirection > 0f)
+        else if (!isFacingRight && movementDirection.x > 0f)
         {
             Flip();
         }
@@ -87,48 +82,38 @@ public class PlayerController : MonoBehaviour
 
     #region INPUTS
 
-  
+
     public void GetHorizontalInput(InputAction.CallbackContext context)
     {
 
-
-        horizontalDirection = context.ReadValue<Vector2>().x;
-
-        verticalDirection = context.ReadValue<Vector2>().y;
-
-
-
-
-        // if (context.performed)
-        // {
-        //     StopCoroutine(airDragEnumerator());
-        // }
-        // if (context.canceled)
-        // {
-        //     StartCoroutine(airDragEnumerator());
-        //
-        // }
-
-
-
+        movementDirection = new Vector2(context.ReadValue<Vector2>().x, context.ReadValue<Vector2>().y);
     }
 
     public void GetEscapeInput(InputAction.CallbackContext context)
     {
         SceneManager.LoadScene("MainMenu");
     }
-    public void GetCrouchInput(InputAction.CallbackContext context)
+
+    public void GetInteractInput(InputAction.CallbackContext context)
     {
-        
+
+        Debug.Log("Interacciono");
+        if (context.performed)
+        {
+            CheckCollision();
+        }
 
     }
+
     #endregion
 
     #region AESTHETIC
+
     void CreateDust()
     {
-        dust.Play();
+        // dust.Play();
     }
+
     private void Flip()
     {
         CreateDust();
@@ -140,120 +125,74 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
-
     #region MOVE
-
 
     private void MoveCharacter()
     {
-        if (!crouch && !attached && !onSlopes)
-        {
 
-            rb.AddForce(new Vector2(horizontalDirection, 0) * movementAcceleration);
+        rb.MovePosition(rb.position + (movementDirection * movementAcceleration * Time.fixedDeltaTime));
+        if (MathF.Abs(rb.velocity.x) > maxMoveSpeed)
+            rb.velocity = new Vector2(MathF.Sign(rb.velocity.x) * maxMoveSpeed, MathF.Sign(rb.velocity.y) * maxMoveSpeed);
 
-            if (MathF.Abs(rb.velocity.x) > maxMoveSpeed)
-                rb.velocity = new Vector2(MathF.Sign(rb.velocity.x) * maxMoveSpeed, rb.velocity.y);
-
-
-            rb.drag = 20.0f;
-        }
-        else if (onSlopes)
-        {
-            Debug.Log("llegue");
-            rb.AddForce(new Vector2(-horizontalDirection * slopeNormal.x * movementAcceleration, slopeNormal.y * -horizontalDirection * movementAcceleration) * 2);
-
-            if (MathF.Abs(rb.velocity.x) > maxMoveSpeed)
-                rb.velocity = new Vector2(MathF.Sign(rb.velocity.x) * maxMoveSpeed, rb.velocity.y);
-            rb.drag = 20.0f;
-        }
-        else if (crouch)
-        {
-            rb.AddForce(new Vector2(horizontalDirection, 0) * movementAcceleration / 2);
-            if (MathF.Abs(rb.velocity.x) > maxMoveSpeed / 2)
-                rb.velocity = new Vector2(MathF.Sign(rb.velocity.x) * (maxMoveSpeed / 2), rb.velocity.y);
-        }
-        else if (attached)
-        {
-
-            if (horizontalDirection > 0)
-            {
-                VineSwing(true);
-            }
-            else if (horizontalDirection < 0)
-            {
-                VineSwing(false);
-            }
-            if (verticalDirection > 0)
-            {
-                Debug.Log("Agarrado");
-                VineSlide(true);
-            }
-            else if (verticalDirection < 0)
-            {
-
-                VineSlide(false);
-            }
-        }
     }
 
     #endregion
 
 
-    #region GROUNDCOLLISIONS
+    #region COLLISIONS
 
     public void CheckCollision()
     {
-        onGround = Physics2D.Raycast(raycastCenter.transform.position * groundRaycastLength, Vector2.down, groundRaycastLength, groundLayer) ||
-                   Physics2D.Raycast(raycastCenter.transform.position - groundRaycastOffset, Vector2.down, groundRaycastLength, groundLayer);
-        onSlopes = Physics2D.Raycast(raycastCenter.transform.position * groundRaycastLength, Vector2.down, groundRaycastLength, slopeLayer) ||
-                     Physics2D.Raycast(raycastCenter.transform.position - groundRaycastOffset, Vector2.down, groundRaycastLength, slopeLayer);
+        RaycastHit2D hit;
+        hit = Physics2D.Raycast(raycastCenter.transform.position, Vector2.up, raycastLength);
 
-        RaycastHit2D hit = Physics2D.Raycast(raycastCenter.transform.position * groundRaycastLength, Vector2.down,
-            groundRaycastLength, slopeLayer);
-        if (hit)
+        if (hit.collider != null)
         {
-            slopeNormal = Vector2.Perpendicular(hit.normal).normalized;
-            slopeAngle = Vector2.Angle(hit.normal, Vector2.up);
+
+            if (hit.collider.gameObject.CompareTag("Collision"))
+            {
+
+                item = hit.collider.GetComponent<ItemObject>();
+                itemGameObject.GetComponent<SpriteRenderer>().sprite = hit.collider.GetComponent<SpriteRenderer>().sprite;
+                itemGameObject.GetComponent<SpriteRenderer>().color = hit.collider.GetComponent<SpriteRenderer>().color;
+
+            }
+            else if (hit.collider.gameObject.CompareTag("Pot"))
+            {
+                if (item != null)
+                {
+
+                    if (hit.collider.gameObject.GetComponent<Pot>().color != Color.black)
+                    {
+                        hit.collider.gameObject.GetComponent<Pot>().color = item.getColor;
+                    }
+                    else if (hit.collider.gameObject.GetComponent<Pot>().color != Color.red)
+                    {
+                        hit.collider.gameObject.GetComponent<Pot>().color = Color.red;
+                    }
+                }
+
+
+            }
         }
 
-        if (onGround && onSlopes)
-        {
-            coyoteCounter = coyoteTime;
-            disregard = null;
-            rb.sharedMaterial = fullFriction;
-
-        }
-        else if (!onGround && onSlopes)
-        {
-            coyoteCounter = coyoteTime;
-            disregard = null;
-            rb.sharedMaterial = fullFriction;
-
-        }
-        else if (onGround && !onSlopes)
-        {
-            coyoteCounter = coyoteTime;
-            disregard = null;
-            rb.sharedMaterial = frictionLess;
-
-        }
-        else
-            coyoteCounter -= Time.deltaTime;
-
-        if (onSlopes && horizontalDirection != 0)
-        {
-            rb.sharedMaterial = frictionLess;
-        }
 
 
     }
 
+
+
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.blue;
-        Gizmos.DrawLine(raycastCenter.transform.position, raycastCenter.transform.position + Vector3.down * groundRaycastLength);
-        Gizmos.color = Color.red;
-        Gizmos.DrawLine(raycastCenter.transform.position - groundRaycastOffset, raycastCenter.transform.position - groundRaycastOffset + Vector3.down * groundRaycastLength);
+
+        Gizmos.color = Color.black;
+        Gizmos.DrawLine(raycastCenter.transform.position,
+            raycastCenter.transform.position + Vector3.up * raycastLength);
+
+
+
+
+
     }
 
     #endregion
