@@ -6,8 +6,10 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-
+    HudController hudController;
     [SerializeField] float masterVolume;
+
+    public int ActiveScene;
     public float MasterVolume()
     {
         return masterVolume;
@@ -17,7 +19,7 @@ public class GameManager : MonoBehaviour
     public float MusicVolume()
     {
         return musicVolume;
-    } 
+    }
     [SerializeField] float sfxVolume;
     public float SfxVolume()
     {
@@ -25,7 +27,7 @@ public class GameManager : MonoBehaviour
     }
     private void Awake()
     {
-        if(instance != null && instance != this)
+        if (instance != null && instance != this)
         {
             Destroy(gameObject);
         }
@@ -38,12 +40,13 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        
+        ActiveScene = SceneManager.GetActiveScene().buildIndex;
+        hudController = FindObjectOfType<HudController>().GetComponent<HudController>();
     }
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
-            FindObjectOfType<HudController>().Options();
+            PauseToggle();
     }
 
     public void SetVolume(float volume, string volumeType)
@@ -69,5 +72,19 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Exiting Game");
         Application.Quit();
+    }
+
+    void PauseToggle()
+    {
+        if (Time.timeScale == 1)
+        {
+            Time.timeScale = 0;
+            hudController.PausePanelToggle();
+        }
+        else
+        {
+            Time.timeScale = 1;
+            hudController.PausePanelToggle();
+        }
     }
 }
