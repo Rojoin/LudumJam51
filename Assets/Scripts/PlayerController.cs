@@ -16,16 +16,18 @@ public class PlayerController : MonoBehaviour
 
 
     [Header("Components")]
-    [SerializeField]
-    private Rigidbody2D rb;
 
+    [SerializeField] private Rigidbody2D rb;
     [SerializeField] private BoxCollider2D cl;
     [SerializeField] private Transform raycastCenter;
+    [SerializeField] private ItemObject item;
+    [SerializeField] private GameObject itemGameObject;
 
 
 
+    [Header("Movement")]
 
-    [Header("Movement")] [SerializeField] private float movementAcceleration;
+    [SerializeField] private float movementAcceleration;
     [SerializeField] private float maxMoveSpeed;
     [SerializeField] private Vector2 movementDirection;
 
@@ -36,16 +38,18 @@ public class PlayerController : MonoBehaviour
                                   (rb.velocity.x < 0f && movementDirection.x > 0f);
 
 
-    [Header("Collision")] [SerializeField] private float raycastLength = 0.3f;
+    [Header("Collision")]
+
+    [SerializeField] private float raycastLength = 0.3f;
     [SerializeField] private bool isFacingRight = true;
-    [SerializeField] private bool takeObject = false;
+
 
 
     // Start is called before the first frame update
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-
+        itemGameObject = gameObject.transform.Find("Square").gameObject;
         cl = GetComponent<BoxCollider2D>();
     }
 
@@ -62,8 +66,6 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-
-
 
         MoveCharacter();
 
@@ -84,11 +86,7 @@ public class PlayerController : MonoBehaviour
     public void GetHorizontalInput(InputAction.CallbackContext context)
     {
 
-        Debug.Log("Movimiento");
         movementDirection = new Vector2(context.ReadValue<Vector2>().x, context.ReadValue<Vector2>().y);
-
-
-
     }
 
     public void GetEscapeInput(InputAction.CallbackContext context)
@@ -133,17 +131,15 @@ public class PlayerController : MonoBehaviour
     {
 
         rb.MovePosition(rb.position + (movementDirection * movementAcceleration * Time.fixedDeltaTime));
-        Debug.Log("moverse");
         if (MathF.Abs(rb.velocity.x) > maxMoveSpeed)
-            rb.velocity = new Vector2(MathF.Sign(rb.velocity.x) * maxMoveSpeed,
-                MathF.Sign(rb.velocity.y) * maxMoveSpeed);
+            rb.velocity = new Vector2(MathF.Sign(rb.velocity.x) * maxMoveSpeed, MathF.Sign(rb.velocity.y) * maxMoveSpeed);
 
     }
 
     #endregion
 
 
-    #region GROUNDCOLLISIONS
+    #region COLLISIONS
 
     public void CheckCollision()
     {
@@ -156,21 +152,24 @@ public class PlayerController : MonoBehaviour
             if (hit.collider.gameObject.CompareTag("Collision"))
             {
 
-                if (takeObject)
-                {
-                    Debug.Log("Se agarro");
-                }
+                item = hit.collider.GetComponent<ItemObject>();
+                itemGameObject.GetComponent<SpriteRenderer>().sprite = hit.collider.GetComponent<SpriteRenderer>().sprite;
+                itemGameObject.GetComponent<SpriteRenderer>().color = hit.collider.GetComponent<SpriteRenderer>().color;
+
             }
             else if (hit.collider.gameObject.CompareTag("Pot"))
             {
+                if (item != null)
+                {
 
-                if (hit.collider.gameObject.GetComponent<Pot>().color != Color.black)
-                {
-                    hit.collider.gameObject.GetComponent<Pot>().color = Color.black;
-                }
-                else if (hit.collider.gameObject.GetComponent<Pot>().color != Color.red)
-                {
-                    hit.collider.gameObject.GetComponent<Pot>().color = Color.red;
+                    if (hit.collider.gameObject.GetComponent<Pot>().color != Color.black)
+                    {
+                        hit.collider.gameObject.GetComponent<Pot>().color = item.getColor;
+                    }
+                    else if (hit.collider.gameObject.GetComponent<Pot>().color != Color.red)
+                    {
+                        hit.collider.gameObject.GetComponent<Pot>().color = Color.red;
+                    }
                 }
 
 
@@ -184,19 +183,19 @@ public class PlayerController : MonoBehaviour
 
 
     private void OnDrawGizmos()
-        {
+    {
 
-            Gizmos.color = Color.black;
-            Gizmos.DrawLine(raycastCenter.transform.position,
-                raycastCenter.transform.position + Vector3.up * raycastLength);
-
-
+        Gizmos.color = Color.black;
+        Gizmos.DrawLine(raycastCenter.transform.position,
+            raycastCenter.transform.position + Vector3.up * raycastLength);
 
 
 
-        }
-
-        #endregion
 
 
     }
+
+    #endregion
+
+
+}
