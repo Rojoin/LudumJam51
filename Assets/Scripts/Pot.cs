@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Pot : MonoBehaviour
 {
-    private SpriteRenderer renderer;
+    private SpriteRenderer spriteRenderer;
 
     [Range(0, 1)] public float lerpTime;
     public float lerpSpeed;
@@ -17,12 +17,22 @@ public class Pot : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        renderer = GetComponent<SpriteRenderer>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        renderer.material.color = Color.Lerp(renderer.material.color, color,lerpTime*Time.deltaTime);
+       spriteRenderer.material.color = Color.LerpUnclamped(spriteRenderer.material.color, color,lerpTime*Time.deltaTime);
+        if (spriteRenderer.material.color == Color.LerpUnclamped(spriteRenderer.material.color, color, lerpTime * Time.deltaTime))
+        {
+            Debug.Log("Termino");
+        }
+        else if (spriteRenderer.material.color != Color.LerpUnclamped(spriteRenderer.material.color, color, lerpTime * Time.deltaTime))
+        {
+            Debug.Log("En Proceso");
+            
+        }
+       
     }
 }
