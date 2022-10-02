@@ -6,6 +6,7 @@ public class HudController : MonoBehaviour
 {
     [SerializeField] GameObject MainMenuPanel;
     [SerializeField] GameObject OptionsPanel;
+    [SerializeField] GameObject PausePanel;
     [SerializeField] GameObject CreditsPanel;
 
     Slider masterVolumeSlider;
@@ -17,9 +18,15 @@ public class HudController : MonoBehaviour
         masterVolumeSlider = OptionsPanel.transform.GetChild(0).GetComponent<Slider>();
         musicVolumeSlider = OptionsPanel.transform.GetChild(1).GetComponent<Slider>();
         sfxVolumeSlider = OptionsPanel.transform.GetChild(2).GetComponent<Slider>();
-        MainMenuPanel.SetActive(true);
+
         OptionsPanel.SetActive(false);
-        CreditsPanel.SetActive(false);
+        if (GameManager.instance.ActiveScene == 0)
+        {
+            MainMenuPanel.SetActive(true);
+            CreditsPanel.SetActive(false);
+        }
+        if (GameManager.instance.ActiveScene != 0)
+            PausePanel.SetActive(false);
     }
     private void Start()
     {
@@ -37,21 +44,30 @@ public class HudController : MonoBehaviour
         }
     }
 
-    public void Options()
+    public void OptionsToggle()
     {
-        OptionsPanel.SetActive(true);
+        if (!OptionsPanel.activeInHierarchy)
+            OptionsPanel.SetActive(true);
+        else
+            OptionsPanel.SetActive(false);
     }
 
-    public void CloseOptions()
+    public void Exit()
     {
-        OptionsPanel.SetActive(false);
+        GameManager.instance.QuitGame();
     }
-    public void credits()
+    public void PausePanelToggle()
     {
-        CreditsPanel.SetActive(true);
+        if (PausePanel.activeInHierarchy)
+            PausePanel.SetActive(false);
+        else
+            PausePanel.SetActive(true);
     }
-    public void CloseCredits()
+    public void creditsToggle()
     {
-        CreditsPanel.SetActive(false);
+        if (!CreditsPanel.activeInHierarchy)
+            CreditsPanel.SetActive(true);
+        else
+            CreditsPanel.SetActive(false);
     }
 }

@@ -210,7 +210,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 155.4
+  m_fontSize: 145
   m_fontSizeBase: 120
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -345,7 +345,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 84.15
+  m_fontSize: 77.3
   m_fontSizeBase: 90.5
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1136,7 +1136,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 84.15
+  m_fontSize: 77.3
   m_fontSizeBase: 90.5
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1559,7 +1559,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1279569820}
         m_TargetAssemblyTypeName: HudController, Assembly-CSharp
-        m_MethodName: Options
+        m_MethodName: OptionsToggle
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1693,7 +1693,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1279569820}
         m_TargetAssemblyTypeName: HudController, Assembly-CSharp
-        m_MethodName: CloseOptions
+        m_MethodName: OptionsToggle
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1808,6 +1808,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   masterVolume: 50
+  ActiveScene: 0
   musicVolume: 50
   sfxVolume: 50
 --- !u!4 &648121159
@@ -2501,7 +2502,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1279569820}
         m_TargetAssemblyTypeName: HudController, Assembly-CSharp
-        m_MethodName: credits
+        m_MethodName: creditsToggle
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2994,7 +2995,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 84.15
+  m_fontSize: 77.3
   m_fontSizeBase: 90.5
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3075,6 +3076,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MainMenuPanel: {fileID: 752341666}
   OptionsPanel: {fileID: 1539221123}
+  PausePanel: {fileID: 0}
   CreditsPanel: {fileID: 1379346403}
 --- !u!4 &1279569821
 Transform:
@@ -3755,7 +3757,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1279569820}
         m_TargetAssemblyTypeName: HudController, Assembly-CSharp
-        m_MethodName: CloseCredits
+        m_MethodName: creditsToggle
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4341,7 +4343,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 84.15
+  m_fontSize: 77.3
   m_fontSizeBase: 90.5
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -4695,7 +4697,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: NicoTest
+          m_StringArgument: SampleSceneTestNico
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1878410292
