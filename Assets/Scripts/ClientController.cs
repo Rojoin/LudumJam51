@@ -84,10 +84,7 @@ public class ClientController : MonoBehaviour
     }
 
 
-    void chooseColor()
-    {
-       
-    }
+  
     IEnumerator Wait()
     {
     
@@ -112,7 +109,7 @@ public class ClientController : MonoBehaviour
     bool isGuisoCorrect()
     {
         RaycastHit2D hit; 
-        Debug.Log("Checking");
+
         hit = Physics2D.Raycast(rayCastDown.transform.position, Vector2.down, raycastLength);
         if (
              (MathF.Abs(hit.collider.gameObject.GetComponent<SpriteRenderer>().material.color.r - wantedGuiso.r) < .1f) &&
@@ -120,7 +117,7 @@ public class ClientController : MonoBehaviour
              (MathF.Abs(hit.collider.gameObject.GetComponent<SpriteRenderer>().material.color.g - wantedGuiso.g) < .1f))
         {
 
-            Debug.Log("Guiso Was Correct");
+     
             isHappy = true;
             return true;
         }
@@ -129,5 +126,5 @@ public class ClientController : MonoBehaviour
         return false;
     }
 
-  
+    public bool getIsHappy => isHappy;
 }
