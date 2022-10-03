@@ -169,13 +169,7 @@ public class PlayerController : MonoBehaviour
                     itemGameObject.GetComponent<SpriteRenderer>().sprite = null;
                     itemGameObject.GetComponent<SpriteRenderer>().color = new Color(1,1,1,0);
                 }
-                else if (hit.collider.gameObject.GetComponent<Pot>().getIsGuisoReady && itemGameObject.CompareTag("Null"))
-                {
-                    itemGameObject.tag = "Dish";
-                    itemGameObject.GetComponent<ItemObject>().color = hit.collider.gameObject.GetComponent<Pot>().color;
-                    itemGameObject.GetComponent<SpriteRenderer>().sprite = hit.collider.gameObject.GetComponent<SpriteRenderer>().sprite;
-               
-                }
+              
             }
         }
 

@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Collision
   - Pot
+  - Ingredient
+  - Null
+  - Dish
   layers:
   - Default
   - TransparentFX

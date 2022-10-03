@@ -23,4 +23,5 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/NicoTest.unity
     guid: f7193ee5ac6a26e49959b033f856ec7d
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.input.settings: {fileID: 11400000, guid: feabd41902756e14aa664ba773f10966, type: 2}

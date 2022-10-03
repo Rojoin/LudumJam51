@@ -26,15 +26,7 @@ public class Pot : MonoBehaviour
     {
        spriteRenderer.material.color = Color.LerpUnclamped(spriteRenderer.material.color, color,lerpTime*Time.deltaTime);
 
-       if (MathF.Abs(spriteRenderer.material.color.r - color.r)<.1f && (MathF.Abs(spriteRenderer.material.color.b - color.b) < .1f)&& (MathF.Abs(spriteRenderer.material.color.g - color.g) < .1f))
-       {
-           isGuisoReady = true;
-           Debug.Log("Ready");
-       }
-       else
-       {
-           isGuisoReady = false;
-       }
+   
 
     }
 
