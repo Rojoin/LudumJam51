@@ -6,6 +6,7 @@ public class ClientSpawner : MonoBehaviour
 {
     [SerializeField] GameObject prefab;
     [SerializeField] bool instaSpawn;
+    [SerializeField]float timeSpawn;
     Vector3 pos;
     bool gameIsRunning;
     void Start()
@@ -21,14 +22,14 @@ public class ClientSpawner : MonoBehaviour
             while (gameIsRunning)
             {
                 Instantiate(prefab, pos, transform.rotation);
-                yield return new WaitForSeconds(10f);
+                yield return new WaitForSeconds(timeSpawn);
             }
         }
         else
         {
             while (gameIsRunning)
             {
-                yield return new WaitForSeconds(10f);
+                yield return new WaitForSeconds(timeSpawn);
                 Instantiate(prefab, pos, transform.rotation);
             }
         }
