@@ -16,6 +16,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] TMP_Dropdown dropdown;
     private bool FullScreen = false;
 
+
+    public int totalAngryClients;
+    public int totalHappyClients;
     public float MasterVolume()
     {
         return masterVolume;

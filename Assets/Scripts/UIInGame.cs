@@ -2,27 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using TMPro;
 
 public class UIInGame : MonoBehaviour
 {
-    public Text Text;
+    [SerializeField] TextMeshProUGUI scoreText;
+    [SerializeField] TextMeshProUGUI angryText;
     private int score;
-
-    [SerializeField] private Example input;
-
-    void Start()
-    {
-        Text = GetComponentInChildren<Text>();
-        input = FindObjectOfType<Example>();
-    }
+    private int angryOnes;
 
     void Update()
     {
-
-        score = input.Input;
-        Text.text = "score: " + score;
-       
-
+        score = GameManager.instance.totalHappyClients;
+        angryOnes = GameManager.instance.totalAngryClients;
+        scoreText.text = "Score: " + score;
+        angryText.text = "Angry Enemies : " + angryOnes;
     }
 }
