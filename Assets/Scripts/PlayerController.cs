@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform raycastCenter;
     [SerializeField] private ItemObject item;
     [SerializeField] private GameObject itemGameObject;
+    [SerializeField] private AudioManager audioManager;
 
 
 
@@ -52,6 +53,8 @@ public class PlayerController : MonoBehaviour
         itemGameObject = gameObject.transform.Find("actualItem").gameObject;
         itemGameObject.tag = "Null";
         cl = GetComponent<BoxCollider2D>();
+        audioManager = FindObjectOfType<AudioManager>();
+
     }
 
     // Update is called once per frame
@@ -97,7 +100,6 @@ public class PlayerController : MonoBehaviour
 
     public void GetInteractInput(InputAction.CallbackContext context)
     {
-
         Debug.Log("Interacciono");
         if (context.performed)
         {
@@ -156,6 +158,7 @@ public class PlayerController : MonoBehaviour
                 itemGameObject.GetComponent<ItemObject>().color = hit.collider.GetComponent<ItemObject>().color;
                 itemGameObject.GetComponent<SpriteRenderer>().sprite = hit.collider.GetComponent<SpriteRenderer>().sprite;
                 itemGameObject.GetComponent<SpriteRenderer>().color = hit.collider.GetComponent<SpriteRenderer>().color;
+                audioManager.SelectAudio(0, GameManager.instance.SfxVolume());
 
             }
             else if (hit.collider.gameObject.CompareTag("Pot"))
@@ -168,6 +171,7 @@ public class PlayerController : MonoBehaviour
                     itemGameObject.tag = "Null";
                     itemGameObject.GetComponent<SpriteRenderer>().sprite = null;
                     itemGameObject.GetComponent<SpriteRenderer>().color = new Color(1,1,1,0);
+                    audioManager.SelectAudio(1, GameManager.instance.SfxVolume());
                 }
               
             }
