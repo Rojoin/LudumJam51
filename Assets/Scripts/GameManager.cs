@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
    
     public int ActiveScene;
     [SerializeField] TMP_Dropdown dropdown;
-    private bool FullScreen = true;
+    private bool FullScreen = false;
 
     public float MasterVolume()
     {
@@ -46,6 +46,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        Screen.fullScreen = FullScreen;
         ActiveScene = SceneManager.GetActiveScene().buildIndex;
         hudController = FindObjectOfType<HudController>().GetComponent<HudController>();
         dropdown =  Resources.FindObjectsOfTypeAll<TMP_Dropdown>().FirstOrDefault();
@@ -111,7 +112,7 @@ public class GameManager : MonoBehaviour
             FullScreen = false;
             Debug.Log("Full Screen OFF");
         }
-        Screen.fullScreen = FullScreen  ;
+        Screen.fullScreen = FullScreen;
     }
     public void setScreenRes() 
     {
@@ -133,8 +134,8 @@ public class GameManager : MonoBehaviour
                 Debug.Log("Resolution Set to : 1280 x 960");
                 break;
             case 3:
-                Screen.SetResolution(960, 540, FullScreen);
-                Debug.Log("Resolution Set to : 960 x 720");
+                Screen.SetResolution(1024, 768, FullScreen);
+                Debug.Log("Resolution Set to : 1024 x 768");
                 break;
             case 4:
                 Screen.SetResolution(800, 600, FullScreen);
