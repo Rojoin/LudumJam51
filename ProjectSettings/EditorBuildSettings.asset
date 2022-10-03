@@ -8,19 +8,22 @@ EditorBuildSettings:
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 0
-    path: Assets/Scenes/Menu Scenes/Options.unity
-    guid: ec5c607be04cdf5489876d32d20606af
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 0
-    path: Assets/Scenes/Menu Scenes/Credits.unity
-    guid: a0309aa74fb8d1a408fda415a9b9cac8
-  - enabled: 1
+    path: 
+    guid: 00000000000000000000000000000000
+  - enabled: 0
     path: Assets/Scenes/SampleSceneTestNico.unity
     guid: 9322f38400a138446823194d4a8e1ed0
   - enabled: 0
     path: Assets/Scenes/NicoTest.unity
     guid: f7193ee5ac6a26e49959b033f856ec7d
+  - enabled: 1
+    path: Assets/Scenes/Menu Scenes/Main_Menu.unity
+    guid: 2b06f54d8c0d91243abdf947eb4b7ada
   m_configObjects: {}

@@ -8,10 +8,12 @@ public class HudController : MonoBehaviour
     [SerializeField] GameObject OptionsPanel;
     [SerializeField] GameObject PausePanel;
     [SerializeField] GameObject CreditsPanel;
+    [SerializeField] GameObject Resolution;
 
     Slider masterVolumeSlider;
     Slider musicVolumeSlider;
     Slider sfxVolumeSlider;
+
 
     private void Awake()
     {
@@ -43,7 +45,6 @@ public class HudController : MonoBehaviour
             GameManager.instance.SetVolume(sfxVolumeSlider.value, "Sfx");
         }
     }
-
     public void OptionsToggle()
     {
         if (!OptionsPanel.activeInHierarchy)
