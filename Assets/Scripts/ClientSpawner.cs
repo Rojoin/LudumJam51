@@ -7,6 +7,7 @@ public class ClientSpawner : MonoBehaviour
     [SerializeField] GameObject prefab;
     [SerializeField] bool instaSpawn;
     [SerializeField]float timeSpawn;
+    [SerializeField]float secondsToWait;
     Vector3 pos;
     bool gameIsRunning;
     void Start()
@@ -21,7 +22,10 @@ public class ClientSpawner : MonoBehaviour
         {
             while (gameIsRunning)
             {
-                Instantiate(prefab, pos, transform.rotation);
+                GameObject Client =Instantiate(prefab, pos, transform.rotation);
+               Client.GetComponent<ClientController>().randomChar =  UnityEngine.Random.Range(0, 3);
+               Client.GetComponent<ClientController>().randomPotion =  UnityEngine.Random.Range(0, 5);
+               Client.GetComponent<ClientController>().SecondsToWait = secondsToWait;
                 yield return new WaitForSeconds(timeSpawn);
             }
         }

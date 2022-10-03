@@ -25,23 +25,42 @@ public class ClientController : MonoBehaviour
     [SerializeField] Color wantedGuiso;
 
     [SerializeField] bool hasReceivedGuiso = false;
-    [SerializeField] int SecondsToWait;
+    [SerializeField] public float SecondsToWait;
     bool isHappy = false;
     bool hasWaited = false;
     bool isWaiting = false;
+    [SerializeField]public int randomPotion;
+    [SerializeField]  public int randomChar;
     [SerializeField] private Color[] posibleColors;
-
+    [SerializeField] private Sprite[] posiblePotions;
+    [SerializeField] private Sprite[] posibleCharactersLeft;
+    [SerializeField] private Sprite[] posibleCharactersFront;
+    [SerializeField] private Sprite[] posibleExpresionsHappy;
+    [SerializeField] private Sprite[] posibleExpresionsSad;
+    [SerializeField] private GameObject desiredPotion;
+    [SerializeField] private GameObject dialogueBox;
+    [SerializeField] private GameObject character;
 
     void Start()
     {
-        wantedGuiso = posibleColors[UnityEngine.Random.Range(0, posibleColors.Length)];
-        Debug.Log(wantedGuiso);
+        character = transform.GetChild(5).gameObject;
+        //randomPotion = UnityEngine.Random.Range(0, posibleColors.Length);
+        wantedGuiso = posibleColors[randomPotion];
+        //randomChar = UnityEngine.Random.Range(0, posibleCharactersFront.Length);
+        character.GetComponent<SpriteRenderer>().sprite = posibleCharactersLeft[randomChar];
+
+        dialogueBox = transform.GetChild(3).gameObject;
+        dialogueBox.SetActive(false);
+        desiredPotion = transform.GetChild(4).gameObject;
+        dialogueBox.SetActive(false);
         servingPoint = GameObject.Find("ServingPoint");
         Exit = GameObject.Find("Exit").transform;
         rayCastCenter = transform.GetChild(0).transform;
         backRayCastCenter = transform.GetChild(1).transform;
         rayCastDown = transform.GetChild(2).transform;
         direction = Vector2.left;
+        ChooseDialogue();
+        StartCoroutine(SayWantedGuiso());
     }
 
     // Update is called once per frame
@@ -60,22 +79,38 @@ public class ClientController : MonoBehaviour
                 StartCoroutine(Wait());
 
             }
+
+            if (isWaiting)
+            {
+                character.GetComponent<SpriteRenderer>().sprite = posibleCharactersFront[randomChar];
+            }
+          
             if (!Physics2D.Raycast(backRayCastCenter.position, Vector2.right, rayDistance, Lane))
             {
                 direction = Vector2.down;
                 rayCastCenter.position = new Vector3(0, -0.51f, 0);
+                character.GetComponent<SpriteRenderer>().sprite = posibleCharactersFront[randomChar];
+
             }
         }
 
+      
         if (!isHappy && hasWaited)
         {
             // se enoja;
-            gameObject.GetComponent<SpriteRenderer>().color = Color.red;
+
+
+            desiredPotion.GetComponent<SpriteRenderer>().sprite = posibleExpresionsSad[randomChar];
+            ShowDialogue();
+
             speed = exitSpeed;
         }
         else if (isHappy && hasWaited)
         {
-            gameObject.GetComponent<SpriteRenderer>().color = Color.green;
+
+            ShowDialogue();
+            desiredPotion.GetComponent<SpriteRenderer>().sprite = posibleExpresionsHappy[randomChar];
+            
         }
 
 
@@ -83,16 +118,52 @@ public class ClientController : MonoBehaviour
             Destroy(gameObject);
     }
 
+    void ChooseDialogue()
+    {
+        desiredPotion.GetComponent<SpriteRenderer>().sprite = posiblePotions[randomPotion];
+    }
+    void ShowDialogue()
+    {
+        dialogueBox.SetActive(true);
+        desiredPotion.SetActive(true);
 
-  
+    }
+    void quitDialogue()
+    {
+        dialogueBox.SetActive(false);
+        desiredPotion.SetActive(false);
+
+    }
+    IEnumerator SayWantedGuiso()
+    {
+        float normalizedTime = 0;
+        while (normalizedTime <= 1)
+        {
+
+            normalizedTime += Time.deltaTime / 2;
+
+        }
+
+        normalizedTime = 0;
+        while (normalizedTime <= 1)
+        {
+            ShowDialogue();
+
+            normalizedTime += Time.deltaTime / 3;
+
+            yield return null;
+        }
+        quitDialogue();
+    }
     IEnumerator Wait()
     {
-    
+
         isWaiting = true;
+    
         float normalizedTime = 0;
-        while (normalizedTime <=1 && !isGuisoCorrect())
+        while (normalizedTime <= 1 && !isGuisoCorrect())
         {
-         
+
 
             normalizedTime += Time.deltaTime / SecondsToWait;
             if (isGuisoCorrect())
@@ -102,13 +173,15 @@ public class ClientController : MonoBehaviour
             yield return null;
         }
 
+
         hasWaited = true;
         isWaiting = false;
+        character.GetComponent<SpriteRenderer>().sprite = posibleCharactersLeft[randomChar];
     }
 
     bool isGuisoCorrect()
     {
-        RaycastHit2D hit; 
+        RaycastHit2D hit;
 
         hit = Physics2D.Raycast(rayCastDown.transform.position, Vector2.down, raycastLength);
         if (
@@ -117,7 +190,7 @@ public class ClientController : MonoBehaviour
              (MathF.Abs(hit.collider.gameObject.GetComponent<SpriteRenderer>().material.color.g - wantedGuiso.g) < .1f))
         {
 
-     
+
             isHappy = true;
             return true;
         }
