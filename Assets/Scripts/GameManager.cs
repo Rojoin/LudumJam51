@@ -10,8 +10,9 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     HudController hudController;
+    private AudioManager audioManager;
     [SerializeField] float masterVolume;
-   
+
     public int ActiveScene;
     [SerializeField] TMP_Dropdown dropdown;
     private bool FullScreen = false;
@@ -50,14 +51,15 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        audioManager = FindObjectOfType<AudioManager>().GetComponent<AudioManager>();
         Screen.fullScreen = FullScreen;
         ActiveScene = SceneManager.GetActiveScene().buildIndex;
         if (SceneManager.GetActiveScene().name != "mainGame")
         {
-        hudController = FindObjectOfType<HudController>().GetComponent<HudController>();
-            
+            hudController = FindObjectOfType<HudController>().GetComponent<HudController>();
+
         }
-        dropdown =  Resources.FindObjectsOfTypeAll<TMP_Dropdown>().FirstOrDefault();
+        dropdown = Resources.FindObjectsOfTypeAll<TMP_Dropdown>().FirstOrDefault();
         dropdown.onValueChanged.AddListener(delegate { setScreenRes(); });
     }
     void Update()
@@ -65,12 +67,19 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
             PauseToggle();
 
-       
-        if(totalAngryClients >= loseCondition && SceneManager.GetActiveScene().name == "mainGame")
+
+        if (totalAngryClients >= loseCondition && SceneManager.GetActiveScene().name == "mainGame")
         {
             totalAngryClients = 0;
             totalHappyClients = 0;
             SceneManager.LoadScene(0);
+        }
+        else if (SceneManager.GetActiveScene().name != "mainGame")
+        {
+            totalAngryClients = 0;
+            totalHappyClients = 0;
+            loseCondition = 3;
+
         }
     }
 
@@ -79,19 +88,20 @@ public class GameManager : MonoBehaviour
         switch (volumeType)
         {
             case "Master":
-                masterVolume = volume ;
+                masterVolume = volume;
                 break;
             case "Music":
-                musicVolume = volume ;
+                musicVolume = volume;
                 break;
             case "Sfx":
-                sfxVolume = volume ;
+                sfxVolume = volume;
                 break;
         }
     }
     public void newScene(string newSceneName)
     {
         SceneManager.LoadScene(newSceneName);
+        audioManager.StopMusic();
     }
     public void QuitGame()
     {
@@ -129,15 +139,14 @@ public class GameManager : MonoBehaviour
         }
         Screen.fullScreen = FullScreen;
     }
-    public void setScreenRes() 
+    public void setScreenRes()
     {
-        //Debug.Log(dropdown.value);
-        //Debug.Log(dropdown.options[dropdown.value].text);
+        
         int dropValue = dropdown.value;
         switch (dropValue)
         {
             case 0:
-                Screen.SetResolution(1440,1080, FullScreen);
+                Screen.SetResolution(1440, 1080, FullScreen);
                 Debug.Log("Resolution Set to : 1440 x 1080");
                 break;
             case 1:

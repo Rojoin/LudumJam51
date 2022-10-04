@@ -159,7 +159,7 @@ public class PlayerController : MonoBehaviour
                 itemGameObject.GetComponent<ItemObject>().color = hit.collider.GetComponent<ItemObject>().color;
                 itemGameObject.GetComponent<SpriteRenderer>().sprite = hit.collider.GetComponent<SpriteRenderer>().sprite;
                 itemGameObject.GetComponent<SpriteRenderer>().color = hit.collider.GetComponent<SpriteRenderer>().color;
-                audioManager.SelectAudio(0, GameManager.instance.SfxVolume());
+               // audioManager.SelectAudio(0, GameManager.instance.SfxVolume());
 
             }
             else if (hit.collider.gameObject.CompareTag("Pot"))
@@ -172,7 +172,7 @@ public class PlayerController : MonoBehaviour
                     itemGameObject.tag = "Null";
                     itemGameObject.GetComponent<SpriteRenderer>().sprite = null;
                     itemGameObject.GetComponent<SpriteRenderer>().color = new Color(1,1,1,0);
-                    audioManager.SelectAudio(1, GameManager.instance.SfxVolume());
+                 //   audioManager.SelectAudio(1, GameManager.instance.SfxVolume());
                 }
               
             }
