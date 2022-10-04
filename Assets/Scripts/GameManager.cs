@@ -52,7 +52,11 @@ public class GameManager : MonoBehaviour
     {
         Screen.fullScreen = FullScreen;
         ActiveScene = SceneManager.GetActiveScene().buildIndex;
+        if (SceneManager.GetActiveScene().name != "mainGame")
+        {
         hudController = FindObjectOfType<HudController>().GetComponent<HudController>();
+            
+        }
         dropdown =  Resources.FindObjectsOfTypeAll<TMP_Dropdown>().FirstOrDefault();
         dropdown.onValueChanged.AddListener(delegate { setScreenRes(); });
     }
@@ -61,8 +65,8 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
             PauseToggle();
 
-
-        if(totalAngryClients >= loseCondition)
+       
+        if(totalAngryClients >= loseCondition && SceneManager.GetActiveScene().name == "mainGame")
         {
             totalAngryClients = 0;
             totalHappyClients = 0;

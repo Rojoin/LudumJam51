@@ -24,7 +24,7 @@ public class AudioManager : MonoBehaviour
 
         if (audioManager != null && audioManager != this)
         {
-            audioManager.PlayMusic(GameManager.instance.ActiveScene, GameManager.instance.MusicVolume()/100);
+            audioManager.PlayMusic(GameManager.instance.ActiveScene, GameManager.instance.MusicVolume());
             Destroy(gameObject);
         }
         else
