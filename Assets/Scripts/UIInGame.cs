@@ -15,6 +15,7 @@ public class UIInGame : MonoBehaviour
     {
         score = GameManager.instance.totalHappyClients;
         angryOnes = GameManager.instance.totalAngryClients;
+        scoreText.text = "Happy: " + score.ToString();
         angryText.text = "Angry: " + angryOnes.ToString();
     }
 }
