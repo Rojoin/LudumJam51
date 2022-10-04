@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
 
     public int totalAngryClients;
     public int totalHappyClients;
+    [SerializeField] int loseCondition;
     public float MasterVolume()
     {
         return masterVolume;
@@ -60,6 +61,13 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
             PauseToggle();
 
+
+        if(totalAngryClients >= loseCondition)
+        {
+            totalAngryClients = 0;
+            totalHappyClients = 0;
+            SceneManager.LoadScene(0);
+        }
     }
 
     public void SetVolume(float volume, string volumeType)

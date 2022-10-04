@@ -29,8 +29,8 @@ public class ClientController : MonoBehaviour
     bool isHappy = false;
     bool hasWaited = false;
     bool isWaiting = false;
-    [SerializeField]public int randomPotion;
-    [SerializeField]  public int randomChar;
+    [SerializeField] public int randomPotion;
+    [SerializeField] public int randomChar;
     [SerializeField] private Color[] posibleColors;
     [SerializeField] private Sprite[] posiblePotions;
     [SerializeField] private Sprite[] posibleCharactersLeft;
@@ -84,7 +84,7 @@ public class ClientController : MonoBehaviour
             {
                 character.GetComponent<SpriteRenderer>().sprite = posibleCharactersFront[randomChar];
             }
-          
+
             if (!Physics2D.Raycast(backRayCastCenter.position, Vector2.right, rayDistance, Lane))
             {
                 direction = Vector2.down;
@@ -94,7 +94,7 @@ public class ClientController : MonoBehaviour
             }
         }
 
-      
+
         if (!isHappy && hasWaited)
         {
             // se enoja;
@@ -110,7 +110,7 @@ public class ClientController : MonoBehaviour
 
             ShowDialogue();
             desiredPotion.GetComponent<SpriteRenderer>().sprite = posibleExpresionsHappy[randomChar];
-            
+
         }
 
 
@@ -159,12 +159,10 @@ public class ClientController : MonoBehaviour
     {
 
         isWaiting = true;
-    
+
         float normalizedTime = 0;
         while (normalizedTime <= 1 && !isGuisoCorrect())
         {
-
-
             normalizedTime += Time.deltaTime / SecondsToWait;
             if (isGuisoCorrect())
             {
@@ -175,6 +173,10 @@ public class ClientController : MonoBehaviour
 
 
         hasWaited = true;
+        if (!isHappy)
+        {
+        GameManager.instance.totalAngryClients++;
+        }
         isWaiting = false;
         character.GetComponent<SpriteRenderer>().sprite = posibleCharactersLeft[randomChar];
     }
@@ -192,6 +194,7 @@ public class ClientController : MonoBehaviour
 
 
             isHappy = true;
+            GameManager.instance.totalHappyClients++;
             return true;
         }
 
