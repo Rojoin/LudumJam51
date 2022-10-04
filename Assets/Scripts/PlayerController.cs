@@ -44,11 +44,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float raycastLength = 0.3f;
     [SerializeField] private bool isFacingRight = true;
 
-
+    [Header("Animator")]
+    [SerializeField] private Animator animator;
 
     // Start is called before the first frame update
     private void Awake()
     {
+        animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         itemGameObject = gameObject.transform.Find("actualItem").gameObject;
         itemGameObject.tag = "Null";
@@ -61,11 +63,10 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
 
-        //animator.SetBool("Crouching", crouch);
-        //animator.SetBool("Jumping", jump);
-        //animator.SetBool("Attaching", attached);
-        //animator.SetBool("OnGround", onGround);
-        //animator.SetBool("Walking", MathF.Abs(horizontalDirection) >= 0.7f);
+
+        animator.SetFloat("Horizontal",movementDirection.x);
+        animator.SetFloat("Vertical",movementDirection.y);
+        animator.SetFloat("Speed",movementDirection.sqrMagnitude);
     }
 
     private void FixedUpdate()
