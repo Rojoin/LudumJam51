@@ -24,7 +24,7 @@ public class AudioManager : MonoBehaviour
 
         if (audioManager != null && audioManager != this)
         {
-            audioManager.PlayMusic(GameManager.instance.ActiveScene, GameManager.instance.MusicVolume());
+            audioManager.PlayMusic(GameManager.instance.ActiveScene, GameManager.instance.MusicVolume()/100);
             Destroy(gameObject);
         }
         else
@@ -35,7 +35,9 @@ public class AudioManager : MonoBehaviour
     }
     public void PlayMusic(int indice, float volumen)
     {
-        controlAudio.PlayOneShot(musics[indice], volumen);
+
+        controlAudio.PlayOneShot(musics[indice],volumen );
+        Debug.Log(volumen);
         controlAudio.loop = true;
     }
 

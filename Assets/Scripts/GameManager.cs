@@ -67,13 +67,13 @@ public class GameManager : MonoBehaviour
         switch (volumeType)
         {
             case "Master":
-                masterVolume = volume;
+                masterVolume = volume ;
                 break;
             case "Music":
-                musicVolume = volume;
+                musicVolume = volume ;
                 break;
             case "Sfx":
-                sfxVolume = volume;
+                sfxVolume = volume ;
                 break;
         }
     }
