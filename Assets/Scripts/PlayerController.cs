@@ -155,7 +155,7 @@ public class PlayerController : MonoBehaviour
             if (hit.collider.gameObject.CompareTag("Ingredient") && !itemGameObject.CompareTag("Dish"))
             {
                 itemGameObject.tag = hit.collider.gameObject.tag;
-                itemGameObject.GetComponent<ItemObject>().color = hit.collider.GetComponent<SpriteRenderer>().color;
+                itemGameObject.GetComponent<ItemObject>().color = hit.collider.GetComponent<ItemObject>().color;
                 itemGameObject.GetComponent<SpriteRenderer>().sprite = hit.collider.GetComponent<SpriteRenderer>().sprite;
                 itemGameObject.GetComponent<SpriteRenderer>().color = hit.collider.GetComponent<SpriteRenderer>().color;
                 audioManager.SelectAudio(0, GameManager.instance.SfxVolume());
