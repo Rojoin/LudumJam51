@@ -46,5 +46,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   masterVolume: 50
   ActiveScene: 0
+  dropdown: {fileID: 0}
+  totalAngryClients: 0
+  totalHappyClients: 0
+  loseCondition: 3
   musicVolume: 50
   sfxVolume: 50
