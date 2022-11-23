@@ -23,7 +23,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/NicoTest.unity
     guid: f7193ee5ac6a26e49959b033f856ec7d
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Menu Scenes/Main_Menu.unity
     guid: 2b06f54d8c0d91243abdf947eb4b7ada
   - enabled: 1
